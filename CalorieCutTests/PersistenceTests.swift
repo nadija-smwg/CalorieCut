@@ -4,8 +4,12 @@ import SwiftData
 
 @MainActor final class PersistenceTests: XCTestCase {
     private var schema: Schema { Schema([UserProfile.self, FoodItem.self, FoodEntry.self, SavedMeal.self, SavedMealFood.self, WeightEntry.self, WaterEntry.self, DailyNote.self, UserSettings.self]) }
+    // A ModelContext does not own its ModelContainer. Keep the container alive for
+    // the full test, including tests that intentionally discard it in their tuple.
+    private var retainedContainers: [ModelContainer] = []
     private func makeStore() throws -> (ModelContainer, AppStore) {
         let container = try ModelContainer(for: schema, configurations: [ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)])
+        retainedContainers.append(container)
         return (container, try AppStore(context: container.mainContext))
     }
     private func sample(date: Date = .now) -> FoodDraft {
