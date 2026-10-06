@@ -32,7 +32,8 @@ if info.get('CFBundleExecutable') != 'CalorieCut' or (app / 'CalorieCut').stat()
     raise SystemExit('Missing or empty compiled executable.')
 print('Validated compiled iPhone app:', info['CFBundleIdentifier'])
 PY
-xcrun lipo -verify_arch arm64 "$app_path/CalorieCut"
+# lipo expects its input file before the verification operation.
+xcrun lipo "$app_path/CalorieCut" -verify_arch arm64
 mkdir -p "$staging_root/Payload"
 ditto "$app_path" "$staging_root/Payload/CalorieCut.app"
 ipa_path="$output_root/CalorieCut-unsigned.ipa"

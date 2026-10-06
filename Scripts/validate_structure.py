@@ -14,7 +14,9 @@ source_files = sorted(root.rglob('*.swift'))
 source_files = [p for p in source_files if '.build' not in p.parts and p.name != 'Package.swift']
 for path in source_files:
     target = path.relative_to(root).parts[0]
-    relative = str(path.relative_to(root / target))
+    # The Xcode project always uses POSIX separators, including when this
+    # validation script is run from Windows.
+    relative = path.relative_to(root / target).as_posix()
     if f'path = "{relative}";' not in text:
         errors.append(f'Missing project source reference: {path}')
 for match in re.finditer(r'isa = PBXBuildFile; fileRef = ([A-F0-9]{24});', text):
