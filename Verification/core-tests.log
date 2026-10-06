@@ -1,0 +1,82 @@
+[0/1] Planning build
+Building for debugging...
+[0/3] Write sources
+[1/3] Write swift-version--765BFAE554EA7E2B.txt
+[3/5] Compiling CalorieCut Formatting.swift
+[4/5] Emitting module CalorieCut
+[6/9] Compiling CalorieCutTests CalculationTests.swift
+[7/9] Compiling CalorieCutTests BackupAndTotalsTests.swift
+[8/9] Emitting module CalorieCutTests
+[9/12] Wrapping AST for CalorieCut for debugging
+[10/12] Write Objects.LinkFileList
+[11/12] Linking CalorieCutCalculationsPackageTests.xctest
+Build complete! (1.46s)
+Test Suite 'All tests' started at 2026-10-06 10:46:58.480
+Test Suite 'debug.xctest' started at 2026-10-06 10:46:58.482
+Test Suite 'BackupAndTotalsTests' started at 2026-10-06 10:46:58.482
+Test Case 'BackupAndTotalsTests.testDailyTotalsMacrosWaterCategoriesAndDayIsolation' started at 2026-10-06 10:46:58.482
+Test Case 'BackupAndTotalsTests.testDailyTotalsMacrosWaterCategoriesAndDayIsolation' passed (0.001 seconds)
+Test Case 'BackupAndTotalsTests.testJSONSchemaRoundTrip' started at 2026-10-06 10:46:58.483
+Test Case 'BackupAndTotalsTests.testJSONSchemaRoundTrip' passed (0.205 seconds)
+Test Case 'BackupAndTotalsTests.testRejectsDuplicateIDs' started at 2026-10-06 10:46:58.688
+Test Case 'BackupAndTotalsTests.testRejectsDuplicateIDs' passed (0.0 seconds)
+Test Case 'BackupAndTotalsTests.testRejectsInvalidFoodAndEmptyMeal' started at 2026-10-06 10:46:58.688
+Test Case 'BackupAndTotalsTests.testRejectsInvalidFoodAndEmptyMeal' passed (0.001 seconds)
+Test Case 'BackupAndTotalsTests.testRejectsInvalidMeasurementWaterAndSteps' started at 2026-10-06 10:46:58.689
+Test Case 'BackupAndTotalsTests.testRejectsInvalidMeasurementWaterAndSteps' passed (0.0 seconds)
+Test Case 'BackupAndTotalsTests.testRejectsMalformedJSONAndOversizedData' started at 2026-10-06 10:46:58.689
+Test Case 'BackupAndTotalsTests.testRejectsMalformedJSONAndOversizedData' passed (0.01 seconds)
+Test Case 'BackupAndTotalsTests.testRejectsUnsupportedVersion' started at 2026-10-06 10:46:58.699
+Test Case 'BackupAndTotalsTests.testRejectsUnsupportedVersion' passed (0.0 seconds)
+Test Case 'BackupAndTotalsTests.testReminderValidationAndRoundTrip' started at 2026-10-06 10:46:58.699
+Test Case 'BackupAndTotalsTests.testReminderValidationAndRoundTrip' passed (0.001 seconds)
+Test Case 'BackupAndTotalsTests.testWeeklyRangeIncludesSevenCalendarDays' started at 2026-10-06 10:46:58.700
+Test Case 'BackupAndTotalsTests.testWeeklyRangeIncludesSevenCalendarDays' passed (0.001 seconds)
+Test Case 'BackupAndTotalsTests.testWeightAdviceForGradualFastAndStableTrends' started at 2026-10-06 10:46:58.700
+Test Case 'BackupAndTotalsTests.testWeightAdviceForGradualFastAndStableTrends' passed (0.0 seconds)
+Test Suite 'BackupAndTotalsTests' passed at 2026-10-06 10:46:58.701
+	 Executed 10 tests, with 0 failures (0 unexpected) in 0.219 (0.219) seconds
+Test Suite 'CalculationTests' started at 2026-10-06 10:46:58.701
+Test Case 'CalculationTests.testActivityMultipliersAndMaintenance' started at 2026-10-06 10:46:58.701
+Test Case 'CalculationTests.testActivityMultipliersAndMaintenance' passed (0.0 seconds)
+Test Case 'CalculationTests.testDefaultModerateDeficit' started at 2026-10-06 10:46:58.701
+Test Case 'CalculationTests.testDefaultModerateDeficit' passed (0.0 seconds)
+Test Case 'CalculationTests.testDeficitIsCapped' started at 2026-10-06 10:46:58.701
+Test Case 'CalculationTests.testDeficitIsCapped' passed (0.0 seconds)
+Test Case 'CalculationTests.testEmptyReviewHasNoScore' started at 2026-10-06 10:46:58.701
+Test Case 'CalculationTests.testEmptyReviewHasNoScore' passed (0.0 seconds)
+Test Case 'CalculationTests.testFemaleBMR' started at 2026-10-06 10:46:58.701
+Test Case 'CalculationTests.testFemaleBMR' passed (0.0 seconds)
+Test Case 'CalculationTests.testFoodValidationRejectsInvalidNumbers' started at 2026-10-06 10:46:58.701
+Test Case 'CalculationTests.testFoodValidationRejectsInvalidNumbers' passed (0.0 seconds)
+Test Case 'CalculationTests.testGainSurplusCapped' started at 2026-10-06 10:46:58.701
+Test Case 'CalculationTests.testGainSurplusCapped' passed (0.1 seconds)
+Test Case 'CalculationTests.testIdealReviewScore' started at 2026-10-06 10:46:58.802
+Test Case 'CalculationTests.testIdealReviewScore' passed (0.0 seconds)
+Test Case 'CalculationTests.testLowCaloriesDoNotEarnPerfectScore' started at 2026-10-06 10:46:58.802
+Test Case 'CalculationTests.testLowCaloriesDoNotEarnPerfectScore' passed (0.0 seconds)
+Test Case 'CalculationTests.testMaleBMR' started at 2026-10-06 10:46:58.802
+Test Case 'CalculationTests.testMaleBMR' passed (0.0 seconds)
+Test Case 'CalculationTests.testMinimumIntake' started at 2026-10-06 10:46:58.802
+Test Case 'CalculationTests.testMinimumIntake' passed (0.0 seconds)
+Test Case 'CalculationTests.testNutritionArithmetic' started at 2026-10-06 10:46:58.803
+Test Case 'CalculationTests.testNutritionArithmetic' passed (0.0 seconds)
+Test Case 'CalculationTests.testOverTargetScoreIsBounded' started at 2026-10-06 10:46:58.803
+Test Case 'CalculationTests.testOverTargetScoreIsBounded' passed (0.0 seconds)
+Test Case 'CalculationTests.testStreakCountsLoggingAndToleratesNotYetLoggedToday' started at 2026-10-06 10:46:58.803
+Test Case 'CalculationTests.testStreakCountsLoggingAndToleratesNotYetLoggedToday' passed (0.0 seconds)
+Test Case 'CalculationTests.testStreakUsesCalendarDaysAcrossDST' started at 2026-10-06 10:46:58.803
+Test Case 'CalculationTests.testStreakUsesCalendarDaysAcrossDST' passed (0.003 seconds)
+Test Case 'CalculationTests.testUnitRoundTrips' started at 2026-10-06 10:46:58.806
+Test Case 'CalculationTests.testUnitRoundTrips' passed (0.0 seconds)
+Test Case 'CalculationTests.testWeeklyAveragesExcludeMissingDays' started at 2026-10-06 10:46:58.806
+Test Case 'CalculationTests.testWeeklyAveragesExcludeMissingDays' passed (0.0 seconds)
+Test Suite 'CalculationTests' passed at 2026-10-06 10:46:58.806
+	 Executed 17 tests, with 0 failures (0 unexpected) in 0.105 (0.105) seconds
+Test Suite 'debug.xctest' passed at 2026-10-06 10:46:58.806
+	 Executed 27 tests, with 0 failures (0 unexpected) in 0.324 (0.324) seconds
+Test Suite 'All tests' passed at 2026-10-06 10:46:58.806
+	 Executed 27 tests, with 0 failures (0 unexpected) in 0.324 (0.324) seconds
+◇ Test run started.
+↳ Testing Library Version: 6.0.3 (18c42c19cac3faf)
+✔ Test run with 0 tests passed after 0.001 seconds.

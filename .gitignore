@@ -1,0 +1,14 @@
+.DS_Store
+.build/
+.swiftpm/
+DerivedData/
+TestResults/
+xcuserdata/
+*.xcuserstate
+*.ipa
+*.xcarchive
+
+.device-build/
+Output/
+cloud-check.log
+cloud-device-build.log

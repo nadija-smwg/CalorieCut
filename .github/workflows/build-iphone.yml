@@ -1,0 +1,56 @@
+name: Build CalorieCut for iPhone
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: caloriecut-iphone-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - name: Check out the project
+        uses: actions/checkout@v4
+
+      - name: Check project files
+        run: python3 Scripts/validate_structure.py
+
+      - name: Build simulator app and run all tests
+        shell: bash
+        run: |
+          set -o pipefail
+          bash Scripts/verify_on_mac.sh 2>&1 | tee cloud-check.log
+
+      - name: Compile device app and package unsigned IPA
+        shell: bash
+        run: |
+          set -o pipefail
+          bash Scripts/build_unsigned_ipa.sh 2>&1 | tee cloud-device-build.log
+
+      - name: Downloadable iPhone build for local signing
+        uses: actions/upload-artifact@v4
+        with:
+          name: CalorieCut-unsigned-iPhone
+          path: Output/CalorieCut-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Save test results and build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CalorieCut-build-logs
+          path: |
+            cloud-check.log
+            cloud-device-build.log
+            TestResults/*.xcresult
+          if-no-files-found: warn
+          retention-days: 7
