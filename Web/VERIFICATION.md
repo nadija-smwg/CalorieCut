@@ -27,6 +27,10 @@ The original iOS palette is restored: black canvas, charcoal cards, white text, 
 
 For this change, the full existing suite passed 53 cases and hit the 30-second limit in WebKit's expanded accessibility scan. That scan now has a 60-second allowance and passed on all engines, including explicit Light and Dark checks. Targeted export/restore checks also passed. The three new migration/persistence/backup cases passed on desktop, mobile, and WebKit after correcting a test navigation assumption. All 57 distinct cases have passing results; a single uninterrupted local run of the new 57-case suite has not been performed. The production build and all 20 unit tests passed.
 
+## Typography and layout refinement
+
+Kept the pure black canvas, charcoal cards, and mint accents. Replaced decorative typography with standard system sans-serif fonts, sentence-case labels, clearer spacing, larger text, and larger touch controls. All six targeted layout and accessibility checks passed across desktop Chromium, mobile Chromium, and mobile WebKit. The production build passed. A subsequent viewport check covered all five screens and the profile dialog at widths of 320, 390, 768, and 1440 pixels, with no horizontal overflow after correcting diary notes wrapping. Desktop, mobile, and welcome screenshots were visually inspected. The full 57-case suite was not rerun for this presentation-only change.
+
 ## Workflows exercised
 
 - Onboarding, safe calorie estimates, editable goals, and profile changes that preserve measurement history.
@@ -62,8 +66,8 @@ For this change, the full existing suite passed 53 cases and hit the 30-second l
 
 ## Still outstanding
 
-1. **GitHub validation of the fixes:** the supplied log for the original commit shows 49 passing tests and five WebKit failures. The previous WebKit fix and manual deployment were confirmed successful by the user’s GitHub screenshots. The new black appearance change requires a fresh CI result and another manual Pages deployment.
-2. **Live HTTPS deployment:** the initial web app was pushed to `main`, but no successful website deployment has been verified. Follow [the deployment guide](README.md#publish-free-with-github-pages). Publishing the cloud environment is separate from publishing the website.
+1. **GitHub validation of the latest appearance changes:** the previous WebKit fix and manual deployment were confirmed successful by the user’s GitHub screenshots. The black appearance and typography refinements require fresh CI results and another manual Pages deployment.
+2. **Latest UI on the live website:** the earlier deployment succeeded, but the latest UI has only been checked in the local production preview. Follow [the deployment guide](README.md#publish-free-with-github-pages) to publish it. Publishing the cloud environment is separate from publishing the website.
 3. **Physical iPhone and Android acceptance:** install from Safari and Chrome, launch from the icon, log food/water, force-close/reopen, test airplane mode, and export/import a backup. Confirm text size, keyboard/date-picker behavior, and VoiceOver/TalkBack usability on the actual devices.
 
 ## Intentional limits

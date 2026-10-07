@@ -1,0 +1,151 @@
+/* Readable system typography and consistent spacing over the original black palette. */
+body { line-height: 1.5; }
+h1, h2, h3, .brand, .mobile-brand, .welcome h1,
+.energy-ring strong, .water-value, .score-orbit strong, .art-circle p {
+  letter-spacing: normal;
+}
+h1 { font-size: 32px; font-weight: 700; line-height: 1.25; }
+h2 { font-size: 20px; line-height: 1.35; }
+h3 { line-height: 1.4; }
+.eyebrow, .sidebar-label, .breadcrumb, .pill, .form-section,
+.energy-ring span, .art-label, .suggestion-box small {
+  font-size: 12px; letter-spacing: normal; font-weight: 500;
+}
+.subtitle, .muted { font-size: 14px; line-height: 1.65; }
+.subtitle { margin-top: 8px; }
+.fine-print, .page-footer, .connection { font-size: 12px; }
+.page-heading { margin-bottom: 24px; }
+.card-heading { flex-wrap: wrap; }
+.diary-layout>div, .diary-layout>aside { min-width: 0; }
+.notes-bottom { flex-wrap: wrap; }
+.notes-bottom label { flex: 1; min-width: 120px; }
+.card-heading .pill { font-size: 11px; }
+.brand { font-size: 22px; }
+.sidebar-label { margin: 36px 12px 14px; }
+.nav-item { font-size: 14px; min-height: 48px; }
+.private-badge, .private-badge small, .profile-badge small { font-size: 12px; }
+.button, .text-button, .settings-grid .button-row .button,
+.water-actions .button, .library-toolbar .button, .entry-actions .button {
+  font-size: 14px; min-height: 44px; border-radius: 12px;
+}
+.button { padding: 12px 18px; }
+.text-button { line-height: 1.4; }
+.icon-button, .library-row .icon-button, .add-circle,
+.calendar-card .icon-button { width: 44px; height: 44px; flex-shrink: 0; }
+.add-circle { color: var(--green); background: var(--soft); border: 0; }
+.add-circle svg { width: 19px; height: 19px; }
+button:focus-visible, a:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--green); outline-offset: 3px;
+}
+.date-control { border-radius: 12px; }
+.date-control label { font-size: 14px; }
+.date-control .icon-button { width: 40px; height: 40px; }
+.energy-ring strong, .water-value, .mini-card strong, .macro strong,
+.goal-list strong, .weekly-averages strong { font-variant-numeric: tabular-nums; }
+.energy-ring span, .energy-detail span, .energy-detail p,
+.energy-detail small, .macro>div:first-child { font-size: 12px; }
+.macro>div>span { font-size: 11px; }
+.macro>div:first-child { flex-wrap: wrap; }
+.macro-grid { gap: 16px; }
+.meter { height: 6px; }
+.water-card>.muted, .water-card>.text-button { font-size: 13px; }
+.water-glasses { margin: 24px 0; }
+.quick-stats .mini-card { position: relative; display: block; padding: 20px; }
+.quick-stats .stat-icon { margin-bottom: 12px; }
+.quick-stats .mini-card .icon-button { position: absolute; top: 12px; right: 12px; }
+.mini-card p, .mini-card small, .mini-note { font-size: 12px; }
+.mini-note { display: block; margin-top: 10px; }
+.quick-stats .goal-mini { display: flex; align-items: center; }
+.goal-mini strong { font-size: 16px; white-space: normal; }
+.section-heading { gap: 16px; }
+.section-heading .eyebrow { font-size: 12px; margin-bottom: 4px; }
+.meal-heading h3 { font-size: 15px; }
+.meal-heading small, .food-row small, .measurement-row small,
+.library-row small, .goal-list small { font-size: 12px; line-height: 1.5; }
+.meal-heading .text-button { font-size: 12px; }
+.food-row { padding-bottom: 12px; border-radius: 8px; }
+.food-row>span:nth-child(2), .food-row>strong, .library-row strong,
+.measurement-row, .goal-list>div { font-size: 14px; }
+.food-row:hover { color: var(--ink); background: var(--soft); }
+.calendar-weekday, .calendar-legend, .calendar-card .fine-print { font-size: 11px; }
+.calendar-day { font-size: 13px; }
+.chart-data, .reflection-note p, .reflection-score>p, .weekly-averages p,
+.insight p, .empty-state p { font-size: 13px; }
+.chart-line { stroke: var(--green); }
+.week-bars small, .week-bar span { font-size: 12px; }
+.segmented button, .chart-controls select { font-size: 13px; min-height: 40px; }
+label, .form-grid label, .checkbox, .entry-total { font-size: 14px; }
+input, select, textarea { font-size: 16px; border-radius: 10px; }
+.quantity-field { font-size: 12px; }
+.quantity-field input { font-size: 16px; min-height: 44px; }
+.form-section { font-size: 14px; font-weight: 600; }
+.modal-header h2 { font-size: 22px; }
+dialog::backdrop { background: #0009; }
+.welcome h1 { font-size: clamp(40px, 5vw, 60px); font-weight: 700; }
+.welcome h1 em { font-family: inherit; font-style: normal; font-weight: inherit; }
+.welcome .pill, .welcome-benefits, .welcome .fine-print, .art-label, .art-tag { font-size: 12px; }
+.welcome-art { border: 1px solid var(--line); border-radius: 28px; }
+.art-circle p { color: var(--ink); font-family: inherit; font-size: 32px; }
+.art-circle { border-color: var(--line); outline-color: var(--line); }
+.art-dot { background: var(--soft); }
+.art-label { max-width: 220px; }
+
+@media (max-width: 950px) {
+  .quick-stats .goal-mini { display: none; }
+  .brand { font-size: 18px; }
+  .profile-badge { flex-wrap: wrap; }
+  .private-badge { flex-wrap: wrap; }
+}
+@media (max-width: 700px) {
+  .page { padding: 24px 16px calc(100px + env(safe-area-inset-bottom)); }
+  h1 { font-size: 28px; }
+  .mobile-brand { font-size: 18px; }
+  .topbar { padding: 0 16px; }
+  .connection { font-size: 11px; }
+  .page-heading { gap: 16px; }
+  .date-control { width: 100%; justify-content: space-between; }
+  .date-control label { flex: 1; }
+  .date-control .icon-button { width: 44px; height: 40px; }
+  .card { padding: 20px; }
+  .energy-content { gap: 16px; justify-content: space-between; padding: 24px 0; }
+  .energy-ring { width: clamp(136px, 41vw, 166px); height: clamp(136px, 41vw, 166px); }
+  .energy-ring>div { width: calc(100% - 22px); height: calc(100% - 22px); }
+  .energy-ring strong { font-size: 34px; }
+  .energy-detail { min-width: 0; flex: 1; max-width: 135px; gap: 16px; }
+  .energy-detail strong { font-size: 19px; }
+  .energy-detail p { font-size: 11px; }
+  .macro-grid { gap: 12px; }
+  .macro>div>span { margin-left: 0; }
+  .quick-stats .mini-card { padding: 16px; }
+  .quick-stats .mini-card .icon-button { top: 8px; right: 8px; }
+  .quick-stats .mini-card strong { font-size: 24px; }
+  .mini-note { display: none; }
+  .section-heading { flex-wrap: wrap; }
+  .meal-card { padding: 0 16px; }
+  .meal-heading { flex-wrap: wrap; gap: 10px; }
+  .meal-heading h3 { min-width: 80px; }
+  .meal-heading .text-button { order: 4; margin-left: 45px; }
+  .food-row { padding: 12px 0; }
+  .mobile-nav { padding: 8px 8px max(12px, env(safe-area-inset-bottom)); }
+  .mobile-nav button { font-size: 11px; min-width: 0; flex: 1; min-height: 48px; padding: 5px 2px; }
+  .mobile-nav button.active { background: var(--soft); }
+  .progress-top { gap: 8px; }
+  .progress-top .mini-card { padding: 14px 10px; }
+  .progress-top .mini-card p { font-size: 11px; line-height: 1.5; }
+  .progress-top .mini-card strong { font-size: 20px; white-space: normal; overflow-wrap: anywhere; }
+  .progress-top .mini-card small { font-size: 11px; }
+  .trend-card .card-heading>.button { font-size: 13px; min-height: 44px; }
+  .weekly-averages { gap: 12px; }
+  .weekly-averages p { font-size: 12px; }
+  .weekly-averages strong { font-size: 21px; }
+  .library-toolbar { flex-wrap: wrap; }
+  .library-toolbar .search-box { flex-basis: 100%; }
+  .library-tabs button { font-size: 12px; }
+  .welcome { padding: 24px 20px; }
+  .welcome-layout { padding-top: 32px; gap: 28px; }
+  .welcome-art { height: 330px; border-radius: 24px; }
+  .welcome-benefits { flex-wrap: wrap; gap: 12px 20px; }
+  .art-circle p { font-size: 28px; }
+  .page-footer { gap: 16px; flex-wrap: wrap; }
+  #toast { bottom: calc(92px + env(safe-area-inset-bottom)); font-size: 13px; }
+}
