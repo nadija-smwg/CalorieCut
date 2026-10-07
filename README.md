@@ -1,5 +1,9 @@
 # CalorieCut
 
+## Web app for iPhone and Android
+
+The installable [CalorieCut web app](Web/README.md) works on iOS and Android, including offline diary logging after the first online visit. It does not require Apple membership or weekly signing refreshes. See the web guide for local development, free HTTPS hosting with GitHub Pages, Home Screen installation, and backup migration from the native app. The website must be published before installing it on your phone.
+
 A native iPhone nutrition diary for iOS 17+, built with SwiftUI, SwiftData, Swift Charts, Observation/MVVM, and local UserNotifications. No packages, login, backend, analytics, API keys, CloudKit, or internet connection are required by the app.
 
 ## Install using Windows

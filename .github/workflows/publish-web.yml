@@ -1,0 +1,75 @@
+name: Publish CalorieCut web app
+
+on:
+  push:
+    branches: [main]
+    paths: ['Web/**', '.github/workflows/publish-web.yml']
+  pull_request:
+    paths: ['Web/**', '.github/workflows/publish-web.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: caloriecut-web-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_dispatch' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: Web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: Web/package-lock.json
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Validate calculations and backups
+        run: npm test
+      - name: Build production app
+        run: npm run build
+      - name: Install matching browser engines
+        run: npx playwright install --with-deps chromium webkit
+      - name: Validate production app in Chromium and WebKit
+        run: npm run test:e2e
+        env:
+          CALORIECUT_WEBKIT: '1'
+      - name: Upload browser failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-diagnostics-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            Web/playwright-report
+            Web/test-results
+          if-no-files-found: ignore
+          retention-days: 7
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          path: Web/dist
+  deploy:
+    if: github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    concurrency:
+      group: caloriecut-pages
+      cancel-in-progress: false
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publish website
+        id: deployment
+        uses: actions/deploy-pages@v4
