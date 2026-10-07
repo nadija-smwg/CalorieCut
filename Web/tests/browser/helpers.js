@@ -1,4 +1,12 @@
 import { expect } from '@playwright/test';
+export async function offlineReload(page, context, browserName, site) {
+  // WebKit's protocol offline flag prevents even service-worker navigations.
+  // Deny the real origin instead, while retaining protocol offline in Chromium.
+  site.disconnect();
+  if (browserName === 'webkit') await context.setOffline(false);
+  await page.reload();
+  expect(await page.evaluate(() => fetch(`./uncached-network-probe?${Date.now()}`).then(() => true, () => false))).toBe(false);
+}
 export async function onboard(page, path = '/') {
   await page.goto(path); await page.getByRole('button', { name: 'Let’s get started' }).click();
   await page.getByLabel('What should we call you?').fill('Alex');

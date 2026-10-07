@@ -2,7 +2,7 @@ import { createServer } from 'node:http';
 import { readdir, readFile } from 'node:fs/promises';
 import { resolve, join, relative } from 'node:path';
 
-export async function staticSite() {
+export async function staticSite(basePath = '/CalorieCut/') {
   const directory = resolve('dist'), files = new Map();
   async function walk(path) {
     for (const item of await readdir(path, { withFileTypes: true })) {
@@ -12,12 +12,13 @@ export async function staticSite() {
     }
   }
   await walk(directory);
-  let version = 1;
+  let version = 1, connected = true;
   const types = { html: 'text/html', js: 'text/javascript', css: 'text/css', svg: 'image/svg+xml', png: 'image/png', webmanifest: 'application/manifest+json' };
   const server = createServer((request, response) => {
+    if (!connected) { request.socket.destroy(); return; }
     let path = new URL(request.url, 'http://localhost').pathname;
-    if (!path.startsWith('/CalorieCut/')) { response.writeHead(404).end(); return; }
-    path = path.slice('/CalorieCut/'.length) || 'index.html';
+    if (!path.startsWith(basePath)) { response.writeHead(404).end(); return; }
+    path = path.slice(basePath.length) || 'index.html';
     if (!files.has(path)) { response.writeHead(404).end(); return; }
     let body = files.get(path);
     if (path === 'index.html') body = Buffer.from(body.toString().replace('</head>', `<meta name="site-version" content="${version}"></head>`));
@@ -26,5 +27,5 @@ export async function staticSite() {
     response.end(body);
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-  return { url: `http://127.0.0.1:${server.address().port}/CalorieCut/`, upgrade: () => version++, close: () => { server.closeAllConnections(); return new Promise(resolve => server.close(resolve)); } };
+  return { url: `http://127.0.0.1:${server.address().port}${basePath}`, upgrade: () => version++, disconnect: () => { connected = false; server.closeAllConnections(); }, close: () => { server.closeAllConnections(); return new Promise(resolve => server.close(resolve)); } };
 }

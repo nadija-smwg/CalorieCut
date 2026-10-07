@@ -25,7 +25,9 @@ Run these commands from `Web`. `npm run preview` starts a long-running productio
 
 Local browser tests use system Chromium if available. Otherwise run `npx playwright install chromium` first. CI installs and uses the browser revision matching the locked Playwright version. `CHROMIUM_PATH` can select a specific Chromium executable in either mode. Tests cover desktop and mobile layouts; they do not replace testing Safari on an actual iPhone or Chrome on an Android phone.
 
-For Safari-engine coverage, install Playwright WebKit with `npx playwright install --with-deps webkit`, then run `CALORIECUT_WEBKIT=1 npm run test:e2e`. The deployment workflow enables this project. Cloud WebKit execution is currently blocked by browser-download access; see the exact results and remaining checks in [VERIFICATION.md](VERIFICATION.md).
+For Safari-engine coverage, install Playwright WebKit with `npx playwright install --with-deps webkit`, then run `CALORIECUT_WEBKIT=1 npm run test:e2e`. The deployment workflow enables this project. WebKit coverage is now available in the cloud environment; see the current results and remaining release checks in [VERIFICATION.md](VERIFICATION.md).
+
+Offline tests disconnect a dedicated production-file server and require uncached network requests to fail. Chromium also uses Playwright’s offline flag. WebKit’s flag blocks service-worker navigation in the test driver, so WebKit reloads use the disconnected server with its protocol online flag restored. Network-status events, persistence, and cached reloads are still checked.
 
 Development mode does not register an offline worker. Test offline behavior against `npm run build` followed by `npm run preview`. The build generates a versioned offline cache containing the entire app shell. Updates activate after all tabs and installed windows using the previous version are closed. Data stays in IndexedDB across app updates.
 

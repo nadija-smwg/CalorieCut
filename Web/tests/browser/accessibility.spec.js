@@ -7,8 +7,10 @@ test('screens and profile form meet automated accessibility checks in light and 
   await expect(page.locator('#toast')).toHaveCSS('opacity', '1');
   await expect(page.locator('#toast')).toHaveCSS('transition-property', 'transform');
   async function check(label) {
+    // Let theme changes and native control painting settle before sampling colors.
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
-    expect(result.violations.map(v => ({ id: v.id, impact: v.impact, selectors: v.nodes.map(n => n.target) })), label).toEqual([]);
+    expect(result.violations.map(v => ({ id: v.id, impact: v.impact, nodes: v.nodes.map(n => ({ target: n.target, summary: n.failureSummary })) })), label).toEqual([]);
   }
   for (const view of ['home', 'diary', 'progress', 'review', 'settings']) { await nav(page, view); await check(view); }
   await page.getByLabel('Appearance', { exact: true }).selectOption('Dark'); await page.getByRole('button', { name: 'Save preferences', exact: true }).click();

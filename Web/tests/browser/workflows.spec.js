@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
-import { onboard, nav, logEgg, localDay } from './helpers.js';
+import { onboard, nav, logEgg, localDay, offlineReload } from './helpers.js';
+import { staticSite } from './static-site.js';
 import { emptyDiary, defaultProfile, uid, now } from '../../src/core.js';
 
 test('favorites and library edits/deletions preserve historical nutrition', async ({ page }) => {
@@ -102,17 +103,20 @@ test('imperial profile boundaries, waist-only measurements and deletion are usab
   await expect(page.locator('#modal')).not.toBeVisible(); await expect(page.locator('.measurement-row')).toHaveCount(1);
 });
 
-test('water history removes logs, and network changes preserve unsaved notes', async ({ page, context }) => {
-  await onboard(page); await page.getByRole('button', { name: 'Custom water amount', exact: true }).click();
-  await page.getByLabel('Water (ml)', { exact: true }).fill('375'); await page.getByRole('button', { name: 'Add water', exact: true }).click();
-  await expect(page.locator('#modal')).not.toBeVisible(); await page.getByRole('button', { name: 'View water logs', exact: true }).click();
-  await expect(page.locator('.library-row')).toContainText('375 ml'); await page.getByRole('button', { name: 'Remove', exact: true }).click();
-  await expect(page.getByText('No water logged on this day.', { exact: true })).toBeVisible(); await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
-  await nav(page, 'diary'); await page.getByLabel('How did your day feel?').fill('Keep this draft.'); await page.getByLabel('Steps (optional)').fill('1234');
-  await page.evaluate(() => navigator.serviceWorker.ready); await context.setOffline(true);
-  await expect(page.locator('.connection')).toContainText('Offline'); await expect(page.getByLabel('How did your day feel?')).toHaveValue('Keep this draft.');
-  await page.getByRole('button', { name: 'Save notes', exact: true }).click(); await expect(page.getByRole('status')).toContainText('Notes saved');
-  await page.reload(); await expect(page.getByLabel('How did your day feel?')).toHaveValue('Keep this draft.');
+test('water history removes logs, and network changes preserve unsaved notes', async ({ page, context, browserName }) => {
+  const site = await staticSite('/');
+  try {
+    await onboard(page, site.url); await page.getByRole('button', { name: 'Custom water amount', exact: true }).click();
+    await page.getByLabel('Water (ml)', { exact: true }).fill('375'); await page.getByRole('button', { name: 'Add water', exact: true }).click();
+    await expect(page.locator('#modal')).not.toBeVisible(); await page.getByRole('button', { name: 'View water logs', exact: true }).click();
+    await expect(page.locator('.library-row')).toContainText('375 ml'); await page.getByRole('button', { name: 'Remove', exact: true }).click();
+    await expect(page.getByText('No water logged on this day.', { exact: true })).toBeVisible(); await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
+    await nav(page, 'diary'); await page.getByLabel('How did your day feel?').fill('Keep this draft.'); await page.getByLabel('Steps (optional)').fill('1234');
+    await page.evaluate(() => navigator.serviceWorker.ready); await context.setOffline(true);
+    await expect(page.locator('.connection')).toContainText('Offline'); await expect(page.getByLabel('How did your day feel?')).toHaveValue('Keep this draft.');
+    await page.getByRole('button', { name: 'Save notes', exact: true }).click(); await expect(page.getByRole('status')).toContainText('Notes saved');
+    await offlineReload(page, context, browserName, site); await expect(page.getByLabel('How did your day feel?')).toHaveValue('Keep this draft.');
+  } finally { await site.close(); }
 });
 
 test('failed storage writes preserve the previous diary without uncaught errors', async ({ page }) => {

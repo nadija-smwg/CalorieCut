@@ -8,16 +8,18 @@ Checked on 2026-10-07 in the Linux cloud environment. The core web workflows pas
 | --- | --- |
 | Foundation rules, validation, dates, units, reviews, backups, and daily aggregation | **20 unit tests passed**, zero failures |
 | Same unit suite in America/New_York, including calendar/DST behavior | **20 passed**, zero failures; repeat run, not additional cases |
-| Desktop and mobile browser workflows | **36 passed**, zero failures, skipped, or expected failures |
+| Chromium desktop/mobile and WebKit mobile browser workflows | **54 passed**, zero failures, skipped, or expected failures |
 | Production build | Passed; static app shell, manifest, icons, and versioned service worker generated |
 | Production preview | Started successfully; all ten production artifacts returned HTTP 200 and matched the built files byte for byte |
 | Native/web backup interoperability | Actual Swift `BackupCodec` accepted the web JSON and re-encoded it; the web decoder accepted the Swift JSON |
-| Automated accessibility | All five screens, dark Settings, and profile dialog passed the enabled WCAG 2.0/2.1 A/AA axe checks on desktop and mobile |
+| Automated accessibility | All five screens, dark Settings, and profile dialog passed the enabled WCAG 2.0/2.1 A/AA axe checks on Chromium desktop/mobile and WebKit mobile |
 | Dependency audit | Zero known vulnerabilities reported by `npm audit` at the time of this check |
 | GitHub Actions workflows | Both web and native workflows pass actionlint 1.7.12; web push/PR validation, manual-only deployment, browser diagnostics, artifact paths, and permissions checked locally |
 | Native project structure | Existing structural check passed; native app source unchanged |
 
-The final browser run uses `CI=1 CHROMIUM_PATH=/usr/bin/chromium`, system Chromium 151.0.7922.173 with Playwright 1.63.0, desktop 1440×1000 and mobile 390×844 layouts, and the Asia/Colombo time zone. This verifies CI's fresh preview-server startup, focused-test guard, and HTML reporter with an explicit local browser override. The GitHub runner's browser installation and WebKit execution remain unverified here. Earlier layout inspection also verified all five screens at 320, 390, 768, and 1440 pixels wide. Automated accessibility checks do not replace a manual screen-reader and usability review.
+The final browser run uses system Chromium 151.0.7922.173 and WebKit 26.6 (revision 2359), Playwright 1.63.0, desktop 1440×1000 and mobile 390×844 layouts, and the Asia/Colombo time zone. CI mode verifies fresh preview-server startup, the focused-test guard, and HTML reporting. Earlier layout inspection also verified all five screens at 320, 390, 768, and 1440 pixels wide. Automated checks do not replace actual-phone installation or a manual screen-reader review.
+
+WebKit download access is now available. This rootless Debian cloud uses additional libraries downloaded through Debian's signed package index and extracted under `/workspace/.toolchains/webkit-libs`. The local helper `/workspace/.toolchains/run-caloriecut-web-tests.sh` independently verifies all 58 WebKit ELF files' shared-library dependencies and GLES dynamic loading before replacing Playwright's cache-only host check, which cannot see libraries installed outside system paths. The GitHub workflow uses its standard `playwright install --with-deps chromium webkit` and normal host validation.
 
 ## Workflows exercised
 
@@ -49,20 +51,13 @@ The final browser run uses `CI=1 CHROMIUM_PATH=/usr/bin/chromium`, system Chromi
 - Web CI now runs on main-branch pushes and pull requests; deployment remains manual and requires successful validation. CI uses matching Playwright browsers, rejects focused tests, and saves failure traces, screenshots, and HTML reports. Timeouts and separate deployment concurrency added.
 - Removed the toast opacity fade after an intermittent mobile accessibility failure: visible status text now keeps full contrast during its slide animation and disappears without fading.
 
+- Reproduced the supplied GitHub log's five WebKit failures. Offline tests now disconnect the actual test origin, close existing connections, and require uncached requests to fail. Chromium retains the protocol offline flag; WebKit restores that flag for reload because it otherwise blocks service-worker navigation before the cached shell can respond. Root/subdirectory reloads, new offline saves, notes, and app updates remain asserted.
+- Settings headings explicitly use their card's theme background, avoiding WebKit's incorrect white-background contrast sample. Accessibility checks wait for painting and report detailed contrast failures; no checks are skipped or disabled.
+
 ## Still outstanding
 
-1. **Safari/WebKit execution:** the browser binary download returned HTTP 403 `Domain forbidden` for `cdn.playwright.dev` and `playwright.download.prss.microsoft.com`. Additions for these two domains are saved in the cloud environment draft. Review and save the network changes in environment settings, then publish the environment. Once runtime access is available, install WebKit and run:
-
-   ```sh
-   cd /workspace/CalorieCut/Web
-   PLAYWRIGHT_BROWSERS_PATH=/workspace/.toolchains/playwright npx --cache /workspace/.toolchains/npm-cache playwright install --with-deps webkit
-   PLAYWRIGHT_BROWSERS_PATH=/workspace/.toolchains/playwright CALORIECUT_WEBKIT=1 npm run test:e2e
-   ```
-
-   These WebKit commands are **not verified here** because download access is blocked. The GitHub Pages workflow installs Chromium and WebKit and enables the Safari project before deploying, but that workflow has not been executed.
-
-2. **Live HTTPS deployment:** source changes have not been pushed and the Pages workflow has not run. Follow [the deployment guide](README.md#publish-free-with-github-pages). Publishing the cloud environment is separate from publishing the website.
-
+1. **GitHub validation of the fixes:** the supplied log for the original commit shows 49 passing tests and five WebKit failures. The fixes now pass all 54 tests locally. The next pushed commit triggers a fresh web CI run; its result must be confirmed on GitHub.
+2. **Live HTTPS deployment:** the initial web app was pushed to `main`, but no successful website deployment has been verified. Follow [the deployment guide](README.md#publish-free-with-github-pages). Publishing the cloud environment is separate from publishing the website.
 3. **Physical iPhone and Android acceptance:** install from Safari and Chrome, launch from the icon, log food/water, force-close/reopen, test airplane mode, and export/import a backup. Confirm text size, keyboard/date-picker behavior, and VoiceOver/TalkBack usability on the actual devices.
 
 ## Intentional limits

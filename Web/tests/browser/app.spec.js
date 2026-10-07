@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { onboard, nav, logEgg } from './helpers.js';
+import { onboard, nav, logEgg, offlineReload } from './helpers.js';
+import { staticSite } from './static-site.js';
 test('logs foods and water, edits entries and persists after reload', async ({ page }) => {
   const errors = []; page.on('pageerror', error => errors.push(error.message));
   await onboard(page); await logEgg(page);
@@ -41,15 +42,18 @@ test('exports and restores a backup and rejects corrupt imports without changing
   const restore = page.waitForEvent('filechooser'); await page.getByRole('button', { name: 'Restore a backup' }).click(); await (await restore).setFiles(path); await page.getByRole('button', { name: 'Confirm', exact: true }).click();
   await expect(page.locator('.energy-ring')).toHaveAttribute('aria-label', '150 of 1,900 calories');
 });
-test('offline reload retains diary and can save new entries', async ({ page, context }) => {
-  await onboard(page); await logEgg(page);
-  await page.evaluate(async () => { await navigator.serviceWorker.ready; if (!navigator.serviceWorker.controller) await new Promise(resolve => navigator.serviceWorker.addEventListener('controllerchange', resolve, { once: true })); });
-  await context.setOffline(true); await expect(page.locator('.connection')).toContainText('Offline');
-  await page.reload(); await expect(page.locator('.energy-ring')).toHaveAttribute('aria-label', '150 of 1,900 calories');
-  // navigator.onLine is a browser hint and can reset on an emulated reload.
-  // Verify that an uncached request actually fails while the cached app works.
-  expect(await page.evaluate(() => fetch('./uncached-network-probe').then(() => true, () => false))).toBe(false);
-  await page.getByRole('button', { name: '250 ml', exact: false }).click(); await expect(page.getByRole('status')).toContainText('Water logged.'); await page.reload(); await expect(page.locator('.water-value')).toContainText('0.25');
+test('offline reload retains diary and can save new entries', async ({ page, context, browserName }) => {
+  const site = await staticSite('/');
+  try {
+    await onboard(page, site.url); await logEgg(page);
+    await page.evaluate(async () => { await navigator.serviceWorker.ready; if (!navigator.serviceWorker.controller) await new Promise(resolve => navigator.serviceWorker.addEventListener('controllerchange', resolve, { once: true })); });
+    await context.setOffline(true); await expect(page.locator('.connection')).toContainText('Offline');
+    await offlineReload(page, context, browserName, site); await expect(page.locator('.energy-ring')).toHaveAttribute('aria-label', '150 of 1,900 calories');
+    // navigator.onLine is a browser hint and can reset on an emulated reload.
+    // Verify that an uncached request actually fails while the cached app works.
+    expect(await page.evaluate(() => fetch('./uncached-network-probe').then(() => true, () => false))).toBe(false);
+    await page.getByRole('button', { name: '250 ml', exact: false }).click(); await expect(page.getByRole('status')).toContainText('Water logged.'); await page.reload(); await expect(page.locator('.water-value')).toContainText('0.25');
+  } finally { await site.close(); }
 });
 test('mobile and desktop layout, preferences, reflection and install guidance', async ({ page }) => {
   await onboard(page);
