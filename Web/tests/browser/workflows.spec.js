@@ -168,3 +168,36 @@ test('food names are displayed as text and the app makes no external page reques
   for (const view of ['diary', 'progress', 'review', 'settings']) await nav(page, view);
   expect(external).toEqual([]);
 });
+
+test('original black appearance restores existing diaries once and preserves later choices', async ({ page }) => {
+  await onboard(page); await logEgg(page);
+  await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
+  await expect(page.locator('.energy-card')).toHaveCSS('background-color', 'rgb(28, 28, 30)');
+  // Simulate a diary saved by the earlier green/System appearance version.
+  await page.evaluate(() => new Promise((resolve, reject) => {
+    const request = indexedDB.open('caloriecut', 1);
+    request.onsuccess = () => {
+      const db = request.result, tx = db.transaction('diary', 'readwrite'), store = tx.objectStore('diary');
+      const get = store.get('current');
+      get.onsuccess = () => { const diary = get.result; delete diary.webAppearanceVersion; diary.settings.theme = 'System'; store.put(diary, 'current'); };
+      tx.oncomplete = () => { db.close(); resolve(); }; tx.onerror = reject;
+    }; request.onerror = reject;
+  }));
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('.energy-ring')).toHaveAttribute('aria-label', '150 of 1,900 calories');
+  await nav(page, 'settings');
+  await page.getByLabel('Appearance', { exact: true }).selectOption('Light');
+  await page.getByRole('button', { name: 'Save preferences', exact: true }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await page.reload(); await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  const downloadPromise = page.waitForEvent('download'); await page.getByRole('button', { name: 'Export backup' }).click();
+  const download = await downloadPromise, path = await download.path();
+  const backup = JSON.parse(await readFile(path, 'utf8')); expect(backup.webAppearanceVersion).toBeUndefined();
+  const chooser = page.waitForEvent('filechooser'); await page.getByRole('button', { name: 'Import backup' }).click();
+  await (await chooser).setFiles(path); await page.getByRole('button', { name: 'Confirm', exact: true }).click();
+  await expect(page.locator('#modal')).not.toBeVisible();
+  await page.reload(); await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await nav(page, 'home');
+  await expect(page.locator('.energy-ring')).toHaveAttribute('aria-label', '150 of 1,900 calories');
+});

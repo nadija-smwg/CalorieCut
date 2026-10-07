@@ -60,7 +60,7 @@ Launch from the new icon once while online. Then try opening it in airplane mode
 - Day navigation and monthly calendar, daily notes, and manually entered steps.
 - Weight and waist measurements, editable history, accessible charts with data tables, and time filters.
 - Daily reflection, seven-day averages excluding unlogged days, and cautious weight-trend guidance.
-- Metric/imperial display and input; system, light, and dark themes.
+- Original black appearance by default: charcoal cards, white text, and the native mint accent. Existing web diaries switch once; later appearance choices are preserved. Metric/imperial display and input; system, light, and dark themes.
 - Validated JSON export/import compatible with the native CalorieCut version-1 format. Imported reminder settings restart disabled.
 - Offline app shell and local IndexedDB storage. Saves are atomic; stale tabs cannot silently overwrite a newer diary.
 

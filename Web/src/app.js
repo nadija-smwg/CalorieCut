@@ -73,6 +73,7 @@ async function commit(change, message) {
 function theme() {
   const dark = data.settings.theme === 'Dark' || (data.settings.theme === 'System' && matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#000000' : '#f6f7f2';
 }
 function render() {
   theme();
@@ -240,7 +241,7 @@ document.addEventListener('click', async event => {
     }
     else if (action === 'export') { const backup = structuredClone(data); backup.exportedAt = now(); download(`CalorieCut-${dayKey()}.json`, encodeBackup(backup)); toast('Backup exported. Keep it somewhere safe.'); }
     else if (action === 'import') chooseImport();
-    else if (action === 'confirm-import') { if (await commit(d => { const revision = d.webRevision; Object.keys(d).forEach(key => delete d[key]); Object.assign(d, pendingImport); d.webRevision = revision; }, 'Backup restored.')) { pendingImport = null; selectedDay = dayKey(); view = 'home'; render(); modal.close(); } }
+    else if (action === 'confirm-import') { if (await commit(d => { const revision = d.webRevision; Object.keys(d).forEach(key => delete d[key]); Object.assign(d, pendingImport); d.webRevision = revision; d.webAppearanceVersion = 1; }, 'Backup restored.')) { pendingImport = null; selectedDay = dayKey(); view = 'home'; render(); modal.close(); } }
     else if (action === 'reset') confirmDialog('Delete all your data?', 'This deletes everything stored by CalorieCut on this device. This cannot be undone without an exported backup.', 'confirm-reset');
     else if (action === 'confirm-reset') { if (await commit(d => { const revision = d.webRevision; Object.keys(d).forEach(key => delete d[key]); Object.assign(d, emptyDiary(), { webRevision: revision }); }, 'Your diary has been cleared.')) modal.close(); }
     else if (action === 'storage') { const granted = await navigator.storage?.persist?.(); toast(granted ? 'Persistent storage granted. Keep exporting backups for extra peace of mind.' : 'Your browser manages storage. Regular backups are the best way to keep your diary safe.'); }
@@ -311,6 +312,14 @@ async function init() {
     const loaded = await loadDiary();
     if (loaded) validateBackup(loaded);
     data = loaded || emptyDiary();
+    // Restore the requested original black appearance once, preserving later choices.
+    if (data.webAppearanceVersion !== 1) {
+      const next = structuredClone(data);
+      next.settings.theme = 'Dark';
+      next.webAppearanceVersion = 1;
+      await saveDiary(next, data.webRevision || 0);
+      data = next;
+    }
     if (['home', 'diary', 'progress', 'review', 'settings'].includes(location.hash.slice(1))) view = location.hash.slice(1);
     render();
   } catch (e) {

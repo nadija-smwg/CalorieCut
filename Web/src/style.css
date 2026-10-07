@@ -14,3 +14,24 @@ html[data-theme=dark]{--bg:#18221c;--card:#202d25;--ink:#e1e8d9;--muted:#9ba894;
 @media(max-width:360px){.page{padding-left:14px;padding-right:14px}.card{padding:18px}.energy-ring{width:144px;height:144px}.energy-ring>div{width:122px;height:122px}.energy-content{gap:17px}.energy-detail{min-width:95px}.energy-ring strong{font-size:31px}.energy-detail strong{font-size:18px}.meal-card{padding:0 18px}.weekly-averages{gap:10px}.progress-top .mini-card strong{font-size:18px}}
 
 :root{--danger:#914c40}.error,.danger-text{color:var(--danger)}.button.danger{color:var(--danger)}html[data-theme=dark]{--danger:#edb3a3}html[data-theme=dark] .button.secondary:hover{background:#354b36}html[data-theme=dark] .button.danger{color:var(--danger)}
+
+/* Original iOS dark palette: black canvas, charcoal grouped cards, mint accent. */
+html[data-theme=dark]{--bg:#000;--card:#1c1c1e;--ink:#f5f5f7;--muted:#aeaeb2;--line:#38383a;--green:#61d1a8;--lime:#61d1a8;--soft:#2c2c2e;--input:#242426;--purple:#8991ed;--orange:#ffb34d;--danger:#ffb4ab;--shadow:none}
+html[data-theme=dark] .card,html[data-theme=dark] .mini-card{border-radius:24px}
+html[data-theme=dark] .water-card,html[data-theme=dark] .reflection-score,html[data-theme=dark] .goal-mini{background:var(--card);border-color:var(--line)}
+html[data-theme=dark] .nav-item.active,html[data-theme=dark] .brand>svg,html[data-theme=dark] .stat-icon,html[data-theme=dark] .avatar{background:#173b30;color:var(--green)}
+html[data-theme=dark] .nav-item.active span{color:var(--ink)}
+html[data-theme=dark] .button:hover{background:#7bdfbb}
+html[data-theme=dark] .button.secondary:hover,html[data-theme=dark] .water-actions .secondary{background:#38383a}
+html[data-theme=dark] .meal-symbol,html[data-theme=dark] .food-dot{background:var(--soft)}
+html[data-theme=dark] .energy-ring{background:conic-gradient(from 225deg,var(--green) 0 var(--progress),#38383a var(--progress) 100%)}
+html[data-theme=dark] .brand-dot,html[data-theme=dark] .mobile-brand>svg,html[data-theme=dark] .mobile-brand>span,html[data-theme=dark] h1>span{color:var(--green)}
+html[data-theme=dark] .pill{background:#173b30;color:var(--green)}
+html[data-theme=dark] .pill.subtle{background:var(--soft);color:var(--muted)}
+html[data-theme=dark] .welcome-art,html[data-theme=dark] .art-circle{background:var(--card);color:var(--ink);border-color:var(--line)}
+html[data-theme=dark] .art-tag{background:var(--soft);color:var(--ink)}
+html[data-theme=dark] .welcome h1 em{color:var(--green)}
+html[data-theme=dark] .danger{background:#382321;color:var(--danger);border-color:#63423f}
+html[data-theme=dark] .meter.protein span,html[data-theme=dark] i.protein{background:#8991ed}
+html[data-theme=dark] .meter.carbs span,html[data-theme=dark] i.carbs{background:#ffb34d}
+html[data-theme=dark] .meter.fat span,html[data-theme=dark] i.fat{background:#f28bb9}

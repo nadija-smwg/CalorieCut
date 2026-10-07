@@ -68,7 +68,7 @@ export function emptyDiary() {
   ];
   return { version: 1, exportedAt: createdAt, profile: null, entries: [], meals: [], measurements: [], water: [], notes: [],
     foods: samples.map(([name, serving, calories, protein, carbs, fat, category]) => ({ id: uid(), createdAt, favorite: false, sample: true, lastUsedAt: null, values: { id: uid(), name, serving, calories, protein, carbs, fat, category, quantity: 1, meal: 'Breakfast', date: createdAt } })),
-    settings: { weightUnit: 'kg', lengthUnit: 'cm', theme: 'System', reminders: reminders.map((id, i) => ({ id, title: id, body: '', enabled: false, hour: [8, 13, 19, 15, 7, 21][i], minute: 0 })) }
+    settings: { weightUnit: 'kg', lengthUnit: 'cm', theme: 'Dark', reminders: reminders.map((id, i) => ({ id, title: id, body: '', enabled: false, hour: [8, 13, 19, 15, 7, 21][i], minute: 0 })) }
   };
 }
 export function emptyStatistics() { return { calories: 0, protein: 0, carbs: 0, fat: 0, water: 0, entryCount: 0, produceCount: 0, meals: Object.fromEntries(MEALS.map(m => [m, 0])) }; }
@@ -153,7 +153,7 @@ export function encodeBackup(data) {
   validateBackup(data);
   // Swift JSONDecoder's ISO8601 strategy expects whole-second timestamps.
   return JSON.stringify(data, (key, value) => {
-    if (key === 'webRevision') return undefined;
+    if (key === 'webRevision' || key === 'webAppearanceVersion') return undefined;
     if (['date', 'createdAt', 'exportedAt', 'lastUsedAt'].includes(key) && typeof value === 'string') return new Date(value).toISOString().replace(/\.\d{3}Z$/, 'Z');
     return value;
   }, 2);
